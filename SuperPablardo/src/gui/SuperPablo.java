@@ -54,7 +54,7 @@ public class SuperPablo extends JPanel implements Runnable, KeyListener {
         fondo = new Fondo(1280);
 
         // Cargar imágenes
-        inicioFondo = new ImageIcon("src/media/fondo.jpg").getImage();
+        inicioFondo = new ImageIcon("src/media/PabloFondo.png").getImage();
         dialogoFondo = new ImageIcon("src/media/fondo_walter.png").getImage();
         mago = new ImageIcon("src/media/walter.png").getImage();
     }
