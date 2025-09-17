@@ -8,7 +8,7 @@ import java.awt.Font;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
-
+import java.io.File;
 public class SuperPablo extends JPanel implements Runnable, KeyListener {
 
     private Thread gameThread;
@@ -31,6 +31,8 @@ public class SuperPablo extends JPanel implements Runnable, KeyListener {
     private Image inicioFondo;
     private Image dialogoFondo;
     private Image mago;
+    
+    private Font miFuente; 
 
     // Dialogo
     private String[] dialogo = {
@@ -57,6 +59,13 @@ public class SuperPablo extends JPanel implements Runnable, KeyListener {
         inicioFondo = new ImageIcon("src/media/PabloFondo.png").getImage();
         dialogoFondo = new ImageIcon("src/media/fondo_walter.png").getImage();
         mago = new ImageIcon("src/media/walter.png").getImage();
+        
+        try {
+            miFuente = Font.createFont(Font.TRUETYPE_FONT, new File("src/media/Pixeled English Font.ttf")).deriveFont(35f);
+        } catch (Exception e) {
+            e.printStackTrace();
+            miFuente = new Font("Arial", Font.BOLD, 40); // fuente de respaldo
+        }
     }
 
     public void startGameLoop() {
@@ -108,11 +117,17 @@ public class SuperPablo extends JPanel implements Runnable, KeyListener {
 
         switch (estado) {
             case INICIO:
-                g.drawImage(inicioFondo, 0, 0, getWidth(), getHeight(), null);
-                g.setColor(Color.WHITE);
-                g.setFont(new Font("Arial", Font.BOLD, 24));
-                g.drawString("Presiona cualquier tecla para comenzar", 400, 300);
-                break;
+            	if(miFuente != null) g.setFont(miFuente); 
+            		g.drawImage(inicioFondo, 0, 0, getWidth(), getHeight(), null);
+            		int sombra = 2;
+            		g.setColor(Color.BLACK);
+                    g.drawString("Presiona cualquier tecla para comenzar", 25 + sombra, 600 + sombra);
+                    
+                    g.setColor(Color.WHITE);
+                    g.drawString("Presiona cualquier tecla para comenzar", 25, 600);
+                    
+                    
+                    break;
 
             case DIALOGO:
                 g.drawImage(dialogoFondo, 0, 0, getWidth(), getHeight(), null);
