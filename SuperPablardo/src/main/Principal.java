@@ -1,5 +1,6 @@
 package main;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import gui.SuperPablo;
 
@@ -16,5 +17,8 @@ public class Principal {
 
         ventana.setVisible(true);
         juego.startGameLoop();
+        JFrame frame = new JFrame("Super Pablo");
+        frame.setIconImage(new ImageIcon("src/media/icono.jpg").getImage());
+
     }
 }

@@ -6,6 +6,10 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import javax.swing.ImageIcon;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip; 
+import java.io.File;
 
 public class Jugador {
 
@@ -29,6 +33,11 @@ public class Jugador {
     private Image imagenSaltando;
     private Image imagenDanio;
     private Image imagenMuerte;
+    
+    private Clip sonidoPisada; 
+    private int contadorPisada = 0; 
+    private int vida = 3;
+
 
     public Jugador(int x, int y) {
         this.x = x;
@@ -44,30 +53,67 @@ public class Jugador {
 
         width = imagenParado.getWidth(null);
         height = imagenParado.getHeight(null);
+        
+        
+    }
+
+    
+    public void cargarSonidoPisada(String ruta) {
+        try {
+            AudioInputStream ais = AudioSystem.getAudioInputStream(new File(ruta));
+            sonidoPisada = AudioSystem.getClip();
+            sonidoPisada.open(ais);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void update(boolean moviendo) {
         // Gravedad
-        if (!enSuelo) {
-            velocidadY += 1;
-            y += velocidadY;
+    	if (!enSuelo) {
+    	    velocidadY += 1;
+    	    y += velocidadY;
 
-            if (y >= 591) {
-                y = 591;
-                enSuelo = true;
-                velocidadY = 0;
-            }
-        }
+    	    if (y >= 591) {
+    	        y = 591;
+    	        enSuelo = true;
+    	        velocidadY = 0;
+    	    }
+    	}
+
 
         if (enSuelo && moviendo) {
             contadorAnimacion++;
+            contadorPisada++;
+
+            // Animación de caminar
             if (contadorAnimacion >= 10) {
                 animacionPaso = (animacionPaso + 1) % 2;
                 contadorAnimacion = 0;
             }
+
+            // Reproducir pisada cada cierto número de frames
+            if (contadorPisada >= 10) { // ajustá según velocidad
+                if (sonidoPisada != null) {
+                    if (sonidoPisada.isRunning()) sonidoPisada.stop();
+                    sonidoPisada.setFramePosition(0);
+                    sonidoPisada.start();
+                }
+                contadorPisada = 0;
+            }
+
         } else {
             animacionPaso = 0;
+            contadorPisada = 0; // reiniciar al detenerse
         }
+        
+        if (danio) {
+            // Podés usar un contador si querés que dure más
+            danio = false;
+        }
+
+
+        
     }
 
     public void mover(int dx) {
@@ -88,9 +134,24 @@ public class Jugador {
         }
     }
 
-    public void recibirDanio() {
-        danio = true;
+    public int getVida() {
+        return vida;
     }
+
+    public void recibirDanio() {
+        if (danio || !vivo) return; // evita daño repetido
+        danio = true;
+        vida--;
+        System.out.println("¡Pablo recibió daño! Vida restante: " + vida);
+        if (vida <= 0) {
+            morir();
+        }
+    }
+
+    public void curar() {
+        if (vida < 3) vida++;
+    }
+
 
     public void morir() {
         vivo = false;
@@ -127,5 +188,16 @@ public class Jugador {
     public void setEnSuelo(boolean b) { enSuelo = b; }
     public void setX(int x) { this.x = x; }
     public void setY(int y) { this.y = y; }
-    public Rectangle getBounds() { return new Rectangle(x, y, width, height); }
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
+
+    public void ajustarSobrePlataforma(int yPlataforma) {
+        y = yPlataforma - height;
+        velocidadY = 0;
+        enSuelo = true;
+    }
+
+
+
 }
