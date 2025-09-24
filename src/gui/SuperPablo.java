@@ -518,22 +518,22 @@ public class SuperPablo extends JPanel implements Runnable, KeyListener {
         		wilson.habilitar(false);
         	    fase = 4;
         	    wilson.invocarEnemigos(camaraX, sueloNivel3, fase, enemigosJ);
-        	}if (fase == 0 && wilson.getVida() <= 4) {
+        	}if (fase == 4 && wilson.getVida() <= 4) {
         		wilson.habilitar(false);
         	    fase = 5;
         	    wilson.invocarEnemigos(camaraX, sueloNivel3, fase, enemigosJ);
         	}
-        	else if (fase == 1 && wilson.getVida() <= 3) {
+        	else if (fase == 5 && wilson.getVida() <= 3) {
         		wilson.habilitar(false);
         	    fase = 6;
         	    wilson.invocarEnemigos(camaraX, sueloNivel3, fase, enemigosJ);
         	}
-        	else if (fase == 2 && wilson.getVida() <= 2) {
+        	else if (fase == 6 && wilson.getVida() <= 2) {
         		wilson.habilitar(false);
         	    fase = 7;
         	    wilson.invocarEnemigos(camaraX, sueloNivel3, fase, enemigosJ);
         	}
-        	else if (fase == 3 && wilson.getVida() <= 1) {
+        	else if (fase == 7 && wilson.getVida() <= 1) {
         		wilson.habilitar(false);
         	    fase = 8;
         	    wilson.invocarEnemigos(camaraX, sueloNivel3, fase, enemigosJ);
