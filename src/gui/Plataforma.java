@@ -6,7 +6,7 @@ import javax.swing.ImageIcon;
 public class Plataforma {
     public int x, y;
     public int width = 48;   // ancho de cada plataforma
-    public int height = 400;   // alto de la plataforma
+    public int height = 450;   // alto de la plataforma
     public int cantidad;      // cuántas se repiten horizontalmente
     private Image sprite;
     private String tipo;

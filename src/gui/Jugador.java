@@ -8,7 +8,8 @@ import java.awt.geom.AffineTransform;
 import javax.swing.ImageIcon;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip; 
+import javax.sound.sampled.Clip;
+
 import java.io.File;
 
 public class Jugador {
@@ -36,11 +37,10 @@ public class Jugador {
     private Image[] imagenCaminando = new Image[2];
     private Image imagenSaltando;
     private Image imagenDanio;
-    private Image imagenMuerte;
     
     private Clip sonidoPisada; 
     private int contadorPisada = 0; 
-    private int vida = 3;
+    private int vida = 5;
 
 
     public Jugador(int x, int y) {
@@ -53,14 +53,12 @@ public class Jugador {
         imagenCaminando[1] = new ImageIcon("src/media/pablo_camina2.png").getImage();
         imagenSaltando = new ImageIcon("src/media/pablo_salto.png").getImage();
         imagenDanio = new ImageIcon("src/media/pablo_danio.png").getImage();
-        imagenMuerte = new ImageIcon("src/media/pablo_muerte.png").getImage();
 
         width = imagenParado.getWidth(null);
         height = imagenParado.getHeight(null);
         
         
     }
-
     
     public void cargarSonidoPisada(String ruta) {
         try {
@@ -137,6 +135,7 @@ public class Jugador {
 
     public void saltar() {
         if (velocidadY == 0) {
+        	SuperPablo.reproducirEfecto("salto");
             velocidadY = -20;
         }
     }
@@ -147,28 +146,25 @@ public class Jugador {
 
     public void recibirDanio() {
         if (invulnerable) return;
-
         vida--;
         invulnerable = true;
         contadorInvulnerabilidad = tiempoInvulnerabilidad;
 
         if (vida <= 0) {
+        	SuperPablo.musicaInicio.stop();
+        	SuperPablo.reproducirEfecto("gameOver");
             vivo = false;
+        } else {
+        	SuperPablo.reproducirEfecto("danio");
         }
     }
-
-    public void curar() {
-        if (vida < 3) vida++;
-    }
-    
 
     public void draw(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
 
         Image imagenActual;
 
-        if (!vivo) imagenActual = imagenMuerte;
-        else if (danio) imagenActual = imagenDanio;
+        if (danio) imagenActual = imagenDanio;
         else if (velocidadY != 0) imagenActual = imagenSaltando;
         else if (SuperPablo.derecha || SuperPablo.izquierda) imagenActual = (animacionPaso == 0) ? imagenCaminando[0] : imagenCaminando[1];
         else imagenActual = imagenParado;
@@ -212,6 +208,11 @@ public class Jugador {
         velocidadY = 0;
     }
 
+    public void curar()
+    {
+    	 vida += 5;
+    }
+    
     public void rebotar()
     {
     	 velocidadY = -15;
@@ -219,7 +220,7 @@ public class Jugador {
     
     public void reiniciarVidas()
     {
-    	vida=3;
+    	vida=5;
     }
 
 }

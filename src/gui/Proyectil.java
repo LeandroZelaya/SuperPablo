@@ -7,14 +7,21 @@ public class Proyectil {
     private int ancho = 20, alto = 20;
     private int velocidad = 5;
     private boolean activo = true;
+    private boolean direccionIzquierda;
 
-    public Proyectil(int x, int y) {
+    public Proyectil(int x, int y, boolean direccionIzquierda) {
         this.x = x;
         this.y = y;
+        this.direccionIzquierda=direccionIzquierda;
     }
 
     public void update() {
-        x -= velocidad; // se mueve hacia la izquierda (hacia el jugador)
+        if(direccionIzquierda) {
+        	x += velocidad; // se mueve hacia la izquierda (hacia el jugador)
+        } else
+        {
+        	x-=velocidad;
+        }
         if (x < 0) activo = false;
     }
 
@@ -34,5 +41,10 @@ public class Proyectil {
 
     public void destruir() {
         activo = false;
+    }
+    
+    public boolean isIzquierda()
+    {
+    	return direccionIzquierda;
     }
 }
